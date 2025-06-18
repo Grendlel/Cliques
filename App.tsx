@@ -1,18 +1,25 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, ImageSourcePropType, TouchableOpacity , Alert} from 'react-native';
+import { StyleSheet, Text, View, Image, ImageSourcePropType, TouchableOpacity, Alert } from 'react-native';
 import { useEffect, useState } from 'react';
-
 
 export default function App() {
 
   const Hammer = require('./assets/Hammer.png');
+  const HammerApertado = require('./assets/hamsterapertado.png')
+  const Reset = require('./assets/reset.png');
 
-  const [vidaMons, setVidaMons] = useState(0);
+  let hamsters = {
+    img1: './assets/Hammer.png',
+    img2: './assets/hamsterapertado.png',
+  }
+
+  const [imagem, setImagem] = useState('')
+  const [clique, setClique] = useState(0);
   const [media, setMedia] = useState(0);
   const [tempo, setTempo] = useState(0);
 
   function contaClique() {
-    setVidaMons(vidaMons + 1)
+    setClique(clique + 1)
     console.log('clique')
   }
 
@@ -27,7 +34,19 @@ export default function App() {
   function contaLonga() {
     console.log('clique Long')
     mediaTempo()
-    Alert.alert(''+media)
+    Alert.alert('Média de tempo: ' + media)
+  }
+
+  function resetTudo() {
+    let reset = 0
+    setClique(reset)
+    setTempo(reset)
+    console.log('resetando')
+  }
+
+  function trocaImagem(){
+    setImagem(state => state === 'img1' ? 'img2': 'img1');
+    console.log('trocou')
   }
 
   useEffect(() => {
@@ -39,19 +58,20 @@ export default function App() {
   }, [tempo]);
 
   function mediaTempo() {
-    setMedia(tempo / vidaMons)
+    setMedia(tempo / clique)
   }
-
-
 
   return (
     <View style={styles.container}>
       <Text style={styles.Texto}>Clique no hammer</Text>
-      <Text style={styles.Vida}>{vidaMons}</Text>
-      <TouchableOpacity onPress={contaClique} onPressIn={contaIn} onPressOut={contaOut} onLongPress={contaLonga}>
+      <Text style={styles.valores}>{clique}</Text>
+      <TouchableOpacity onPress={contaClique} onPressIn={trocaImagem} onPressOut={contaOut} onLongPress={contaLonga}>
         <Image style={styles.atk} source={Hammer}></Image>
       </TouchableOpacity>
-      <Text style={styles.Vida}>{tempo}</Text>
+      <Text style={styles.valores}>{tempo}</Text>
+      <TouchableOpacity onPress={resetTudo}>
+        <Image style={styles.reset} source={Reset}></Image>
+      </TouchableOpacity>
       <StatusBar style="auto" />
     </View>
   );
@@ -73,8 +93,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  Vida: {
-    fontSize: 50,
+  valores: {
+    fontSize: 35,
     color: '#ff1688',
     textAlign: "center",
     justifyContent: 'center',
@@ -83,6 +103,7 @@ const styles = StyleSheet.create({
     borderRadius: 200,
     padding: 12,
     backgroundColor: '#47c8c0',
+    margin: 4
   },
 
   mon: {
@@ -93,5 +114,11 @@ const styles = StyleSheet.create({
   atk: {
     height: 300,
     width: 300,
+  },
+
+  reset: {
+    marginTop: 2,
+    height: 130,
+    width: 130,
   },
 });
