@@ -1,14 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, ImageSourcePropType, TouchableOpacity, Pressable,  Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageSourcePropType, TouchableOpacity, Alert } from 'react-native';
 import { useEffect, useState } from 'react';
 
 export default function App() {
 
+  const Hammer = require('./assets/Hammer.png');
+  const HammerApertado = require('./assets/hamsterapertado.png')
   const Reset = require('./assets/reset.png');
+
   const img1 = require('./assets/Hammer.png');
   const img2 = require('./assets/hamsterapertado.png');
 
-  const [imagem, setImagem] = useState(img1);
+  const [imagem, setImagem] = useState('')
   const [clique, setClique] = useState(0);
   const [media, setMedia] = useState(0);
   const [tempo, setTempo] = useState(0);
@@ -20,6 +23,7 @@ export default function App() {
 
   function contaIn() {
     setImagem(img2)
+    
     if(clique == 0){
       console.log('foi') 
         setTempo(0)
@@ -32,7 +36,7 @@ function contaOut(){
 }
 
   function contaLonga() {
-    console.log('clique longo')
+    console.log('clique Long')
     mediaTempo()
     Alert.alert('Média de tempo: ' + media)
   }
@@ -42,6 +46,11 @@ function contaOut(){
     setClique(reset)
     setTempo(reset)
     console.log('resetando')
+  }
+
+  function trocaImagem(){
+    setImagem(state => state === 'img1' ? 'img2': 'img1');
+    console.log('trocou')
   }
 
   useEffect(() => {
@@ -60,9 +69,9 @@ function contaOut(){
     <View style={styles.container}>
       <Text style={styles.Texto}>Clique no hammer</Text>
       <Text style={styles.valores}>{clique}</Text>
-      <Pressable onPress={contaClique} onPressIn={contaIn} onPressOut={contaOut} onLongPress={contaLonga}>
-        <Image style={styles.atk} source={imagem}></Image>
-      </Pressable>
+      <TouchableOpacity onPress={contaClique} onPressIn={contaIn} onPressOut={contaOut} onLongPress={contaLonga}>
+        <Image style={styles.atk} source={Hammer}></Image>
+      </TouchableOpacity>
       <Text style={styles.valores}>{tempo}</Text>
       <TouchableOpacity onPress={resetTudo}>
         <Image style={styles.reset} source={Reset}></Image>
